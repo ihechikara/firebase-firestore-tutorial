@@ -1,12 +1,22 @@
-const username = document.getElementById('username');
-const about = document.getElementById('about');
-const btn = document.getElementById('btn');
+const lists = document.getElementById("lists");
 
-btn.addEventListener('click', ()=>{
-    db.collection('userInfo').add({
-        username: username.value,
-        bio: about.value
+db.collection("userInfo")
+  .get()
+  .then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      let li = document.createElement("li");
+      let username = document.createElement("h4");
+      let bio = document.createElement("p");
+
+      username.textContent = doc.data().username;
+      bio.textContent = doc.data().bio;
+
+      li.appendChild(username);
+      li.appendChild(bio);
+
+      lists.appendChild(li);
     });
-    username.value = '';
-    about.value = '';
-})
+  })
+  .catch((error) => {
+    console.log("Error getting documents: ", error);
+  });
